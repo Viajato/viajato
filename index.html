@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viajato | Sua Próxima Aventura Começa Aqui</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; margin: 0; }
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        
+        /* Cores Oficiais */
+        .bg-viajato-blue { background-color: #0047AB; }
+        .text-viajato-blue { color: #0047AB; }
+        .bg-viajato-yellow { background-color: #FFD740; }
+        .text-viajato-yellow { color: #FFD740; }
+        .border-viajato-blue { border-color: #0047AB; }
+        .bg-footer-dark { background-color: #0a0f1c; }
+
+        /* Animação Carregamento */
+        @keyframes moveClouds {
+            0% { transform: translateX(200%); }
+            100% { transform: translateX(-300%); }
+        }
+        .cloud-realistic {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            filter: blur(12px);
+            animation: moveClouds linear infinite;
+        }
+        
+        /* Ajuste na janela de carregamento para tirar a brecha */
+        .window-frame-outer {
+            box-shadow: 0 0 0 100vmax #0f172a, inset 0 0 40px rgba(0,0,0,0.8);
+            border: 12px solid #334155;
+            background: #0f172a;
+        }
+
+        /* Animação Esmaecer (Hero) */
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.3; transform: translateY(5px); }
+            50% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-dream {
+            animation: fadeInOut 4s ease-in-out infinite;
+        }
+        
+        /* Utilitários */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        [x-cloak] { display: none !important; }
+
+        /* Efeitos de Hover */
+        .service-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+            border-color: #0047AB;
+        }
+
+        .destination-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .destination-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+
+        .review-card {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        .review-card:hover { transform: translateY(-5px); }
+        
+        .carousel-container {
+            scroll-behavior: smooth;
+        }
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-slate-50 text-slate-900" x-data="{ scrolled: false, mobileMenu: false, loading: true }" @scroll.window="scrolled = (window.pageYOffset > 50)" x-init="setTimeout(() => { loading = false; lucide.createIcons(); }, 3500)">
+
+    <!-- TELA DE CARREGAMENTO -->
+    <div x-show="loading" x-transition:leave="transition ease-in duration-700" class="fixed inset-0 z-[100] bg-[#0f172a] flex flex-col items-center justify-center">
+        <div class="relative w-[280px] h-[380px] sm:w-[300px] sm:h-[420px] rounded-[100px] overflow-hidden window-frame-outer">
+            <div class="absolute inset-0 bg-gradient-to-b from-[#7dd3fc] via-[#38bdf8] to-[#fb923c] overflow-hidden">
+                <div class="cloud-realistic w-48 h-16 top-20" style="animation-duration: 12s; left: 10%; opacity: 0.6;"></div>
+                <div class="cloud-realistic w-64 h-24 top-40" style="animation-duration: 8s; left: 50%; opacity: 0.8;"></div>
+                <div class="cloud-realistic w-80 h-32 bottom-10" style="animation-duration: 10s; left: 0%; opacity: 0.7;"></div>
+            </div>
+        </div>
+        <div class="mt-10 text-center text-white">
+            <h2 class="font-black text-3xl tracking-[0.3em] uppercase">VIAJATO</h2>
+            <p class="text-slate-500 text-xs tracking-[0.2em] uppercase mt-2">Sua viagem começa agora</p>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav :class="scrolled ? 'glass-nav shadow-lg py-3' : 'bg-transparent py-5'" class="fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <img :src="scrolled ? 'https://i.ibb.co/LzNfS8yQ/viajato-blue.png' : 'https://i.ibb.co/YFm7qV6n/viajato-white.png'" alt="Viajato" class="h-9 transition-all">
+            </div>
+
+            <div class="hidden md:flex items-center gap-8 text-sm">
+                <a href="#inicio" :class="scrolled ? 'text-slate-700' : 'text-white'" class="font-bold hover:text-amber-500 transition-colors uppercase tracking-wider">Início</a>
+                <a href="#servicos" :class="scrolled ? 'text-slate-700' : 'text-white'" class="font-bold hover:text-amber-500 transition-colors uppercase tracking-wider">Serviços</a>
+                <a href="#destinos" :class="scrolled ? 'text-slate-700' : 'text-white'" class="font-bold hover:text-amber-500 transition-colors uppercase tracking-wider">Destinos</a>
+                <a href="#avaliacoes" :class="scrolled ? 'text-slate-700' : 'text-white'" class="font-bold hover:text-amber-500 transition-colors uppercase tracking-wider">Avaliações</a>
+                <a href="https://wa.me/5531984885050" target="_blank" class="bg-viajato-yellow text-blue-900 px-6 py-2.5 rounded-full font-black hover:scale-105 transition-all shadow-lg">WhatsApp</a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden">
+                <i data-lucide="menu" :class="scrolled ? 'text-slate-900' : 'text-white'" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <div x-show="mobileMenu" x-cloak class="absolute top-0 left-0 w-full bg-white shadow-2xl p-6 md:hidden flex flex-col gap-4 pt-20">
+            <button @click="mobileMenu = false" class="absolute top-6 right-6 text-slate-900"><i data-lucide="x" class="w-8 h-8"></i></button>
+            <a href="#inicio" @click="mobileMenu = false" class="text-xl font-bold border-b pb-2">Início</a>
+            <a href="#servicos" @click="mobileMenu = false" class="text-xl font-bold border-b pb-2">Serviços</a>
+            <a href="#destinos" @click="mobileMenu = false" class="text-xl font-bold border-b pb-2">Destinos</a>
+            <a href="#avaliacoes" @click="mobileMenu = false" class="text-xl font-bold border-b pb-2">Avaliações</a>
+            <a href="https://wa.me/5531984885050" class="bg-viajato-yellow text-blue-900 text-center py-4 rounded-xl font-black">Chamar no WhatsApp</a>
+        </div>
+    </nav>
+
+    <!-- HERO (AJUSTADO PARA 92vh) -->
+    <section id="inicio" class="relative h-[92vh] flex items-center bg-slate-900">
+        <div class="absolute inset-0 bg-cover bg-center opacity-70" style="background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&q=80&w=2000')"></div>
+        <div class="container mx-auto px-4 relative z-10 text-white">
+            <div class="max-w-4xl text-left">
+                <div class="inline-flex items-center gap-3 bg-[#1D4ED8] text-white px-6 py-2.5 rounded-full mb-8 shadow-xl animate-fade-dream">
+                    <i data-lucide="plane" class="w-5 h-5"></i>
+                    <span class="text-sm font-bold uppercase tracking-wider">Especialistas em realizar sonhos</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-8xl font-black mb-6 uppercase tracking-tighter leading-none">VIAJAR É <span class="text-blue-400">PRECISO</span></h1>
+                <p class="text-lg md:text-xl text-slate-200 mb-10 max-w-xl leading-relaxed">Não vendemos apenas passagens, entregamos memórias inesquecíveis. Planejamos cada detalhe para você.</p>
+                <a href="https://wa.me/5531984885050" target="_blank" class="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-5 rounded-2xl font-black text-xl transition-all shadow-xl">
+                    <i data-lucide="message-circle"></i> PEDIR ORÇAMENTO
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section id="servicos" class="py-20 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            
+            <!-- Banner de parcelamento em primeiro -->
+            <div class="inline-flex items-center gap-2 bg-viajato-blue text-white px-8 py-4 rounded-full shadow-lg mb-12">
+                <span class="text-sm md:text-lg font-bold uppercase tracking-wide flex items-center gap-2">🚀 PARCELAMOS EM ATÉ <span class="text-viajato-yellow">12X NO CARTÃO!</span></span>
+            </div>
+
+            <!-- Cabeçalho "O QUE OFERECEMOS" em segundo -->
+            <div class="mb-16 flex flex-col items-center">
+                <h2 class="text-4xl md:text-5xl font-black text-[#0a1e3d] uppercase tracking-tighter mb-2">O QUE OFERECEMOS</h2>
+                <div class="w-32 h-2.5 bg-viajato-yellow rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="plane" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Voos</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Passagens nacionais e internacionais com as melhores taxas.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="hotel" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Hospedagens</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Hotéis, resorts e pousadas selecionadas.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="globe" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Pacotes</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Roteiros completos feitos sob medida para você.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="credit-card" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Pagamento</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Facilidade no cartão de crédito em até 12x.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="wifi" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Chip Internacional</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Internet ilimitada para sua viagem ao exterior.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="ticket" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Passeios</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Ingressos e roteiros locais inesquecíveis.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="bus" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Translados</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Conforto e segurança no transporte local.</p>
+                </div>
+                <div class="service-card p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center">
+                    <div class="text-viajato-blue mb-4"><i data-lucide="briefcase" class="w-8 h-8"></i></div>
+                    <h3 class="text-base font-black text-viajato-blue mb-2 uppercase">Seguro Viagem</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">Tranquilidade total para você e sua família.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DESTINOS MAIS PROCURADOS -->
+    <section id="destinos" class="py-24 bg-slate-50 overflow-hidden" x-data="{ 
+        scrollNext() { this.$refs.carousel.scrollLeft += 340 },
+        scrollPrev() { this.$refs.carousel.scrollLeft -= 340 }
+    }">
+        <div class="container mx-auto px-4 text-center mb-12">
+            <h2 class="text-4xl font-black uppercase text-viajato-blue mb-4 tracking-tighter">Destinos mais Procurados</h2>
+            <p class="text-slate-500 text-sm">Navegue pelos nossos 10 destinos exclusivos.</p>
+        </div>
+        
+        <div class="relative container mx-auto px-4">
+            <button @click="scrollPrev()" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 p-3 rounded-full shadow-xl text-viajato-blue hover:bg-viajato-blue hover:text-white transition-all hidden md:block border border-slate-100">
+                <i data-lucide="chevron-left"></i>
+            </button>
+            
+            <div x-ref="carousel" class="carousel-container flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-12">
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Maldivas</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Paris</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Disney</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1578330132801-f2bc6293936a?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Gramado</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Roma</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Noronha</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Egito</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Japão</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1510097467424-192d713fd8b2?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Cancún</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Suíça</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+            </div>
+            
+            <button @click="scrollNext()" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/90 p-3 rounded-full shadow-xl text-viajato-blue hover:bg-viajato-blue hover:text-white transition-all hidden md:block border border-slate-100">
+                <i data-lucide="chevron-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- AVALIAÇÕES -->
+    <section id="avaliacoes" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-black text-center text-viajato-blue mb-16 uppercase tracking-tight">O QUE DIZEM NOSSOS VIAJANTES</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-50 review-card flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex text-amber-400 mb-6 gap-1">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-slate-600 italic mb-8 leading-relaxed">"Atendimento impecável! Resolveram tudo rápido e o suporte durante a viagem foi essencial. Recomendo muito!"</p>
+                    </div>
+                    <p class="font-black text-viajato-blue text-sm uppercase tracking-wide">— Mariana Silva</p>
+                </div>
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-50 review-card flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex text-amber-400 mb-6 gap-1">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-slate-600 italic mb-8 leading-relaxed">"Melhores preços de pacotes que encontrei. Viajei com a família para Porto Seguro e foi tudo perfeito."</p>
+                    </div>
+                    <p class="font-black text-viajato-blue text-sm uppercase tracking-wide">— Ricardo Gomes</p>
+                </div>
+                <div class="bg-white p-10 rounded-[2.5rem] border border-slate-50 review-card flex flex-col justify-between h-full">
+                    <div>
+                        <div class="flex text-amber-400 mb-6 gap-1">
+                            <i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i><i data-lucide="star" fill="currentColor" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-slate-600 italic mb-8 leading-relaxed">"O chip de internet que me venderam funcionou muito bem no exterior. Nota 10!"</p>
+                    </div>
+                    <p class="font-black text-viajato-blue text-sm uppercase tracking-wide">— Beatriz Costa</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="https://www.google.com/search?q=Viajato+Viagens+avaliações" target="_blank" class="inline-flex items-center gap-2 text-slate-500 font-bold hover:text-viajato-blue transition-colors group">
+                    <img src="https://www.google.com/favicon.ico" alt="" class="w-4 h-4">
+                    Ver todas as avaliações no Google 
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAIXA AMARELA CTA -->
+    <section class="bg-viajato-yellow py-20 text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-black text-viajato-blue mb-4 uppercase tracking-tighter">PLANEJE SUA VIAGEM COM SEGURANÇA</h2>
+            <p class="text-blue-900 font-bold mb-10 text-lg">Deixe a logística conosco e foque apenas em criar memórias.</p>
+            <a href="https://wa.me/5531984885050" target="_blank" class="inline-flex items-center gap-3 bg-viajato-blue text-white px-12 py-5 rounded-full font-black text-xl hover:scale-105 transition-all shadow-2xl">
+                <i data-lucide="message-circle" class="w-6 h-6"></i> Falar agora no WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-footer-dark text-slate-400 pt-20 pb-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <div>
+                    <img src="https://i.ibb.co/YFm7qV6n/viajato-white.png" alt="Viajato Logo" class="h-9 mb-8">
+                    <h4 class="text-white font-black text-sm mb-4 uppercase">VIAJATO VIAGENS LTDA</h4>
+                    <p class="text-xs mb-2">CNPJ: 64.630.944/0001-25</p>
+                    <p class="text-xs">Belo Horizonte - MG</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-black text-xs mb-8 uppercase tracking-widest">NAVEGAÇÃO</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li><a href="#inicio" class="hover:text-white transition-colors">Início</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Quem Somos</a></li>
+                        <li><a href="#servicos" class="hover:text-white transition-colors">Serviços</a></li>
+                        <li><a href="#destinos" class="hover:text-white transition-colors">Destinos</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-black text-xs mb-8 uppercase tracking-widest">CONTATO</h4>
+                    <ul class="space-y-4 text-sm font-bold">
+                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4 text-viajato-yellow"></i> (31) 98488-5050</li>
+                        <li class="flex items-center gap-3"><i data-lucide="instagram" class="w-4 h-4 text-viajato-yellow"></i> @viajatoviagens</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-black text-xs mb-8 uppercase tracking-widest">TURISMO LEGAL</h4>
+                    <div class="bg-slate-800/20 p-4 rounded-xl inline-block">
+                        <img src="https://www.gov.br/turismo/pt-br/assuntos/cadastur/logo_cadastur_branco.png" alt="Selo Cadastur" class="h-10 mb-2 opacity-80">
+                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">CERTIFICADO CADASTUR OFICIAL</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800/50 text-center text-[10px] uppercase font-bold tracking-[0.2em] opacity-40">
+                <p>© 2024 VIAJATO VIAGENS. TODOS OS DIREITOS RESERVADOS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BOTÃO FLUTUANTE WHATSAPP -->
+    <a href="https://wa.me/5531984885050" target="_blank" class="fixed bottom-6 right-6 z-50 bg-emerald-500 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-all flex items-center gap-2 group">
+        <i data-lucide="message-circle" class="w-7 h-7"></i>
+        <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 font-bold whitespace-nowrap px-0 group-hover:px-2">Fale conosco agora!</span>
+    </a>
+
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
