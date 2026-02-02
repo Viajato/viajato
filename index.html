@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -48,7 +47,7 @@
         /* Ajuste na janela de carregamento para tirar a brecha */
         .window-frame-outer {
             box-shadow: 0 0 0 100vmax #0f172a, inset 0 0 40px rgba(0,0,0,0.8);
-            border: 12px solid #334155;
+            border: 10px solid #334155;
             background: #0f172a;
         }
 
@@ -97,28 +96,28 @@
     </style>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-slate-50 text-slate-900" x-data="{ scrolled: false, mobileMenu: false, loading: true }" @scroll.window="scrolled = (window.pageYOffset > 50)" x-init="setTimeout(() => { loading = false; lucide.createIcons(); }, 3500)">
+<body class="bg-slate-50 text-slate-900" x-data="{ scrolled: false, mobileMenu: false, loading: true }" @scroll.window="scrolled = (window.pageYOffset > 50)" x-init="setTimeout(() => { loading = false; lucide.createIcons(); }, 1800)">
 
     <!-- TELA DE CARREGAMENTO -->
-    <div x-show="loading" x-transition:leave="transition ease-in duration-700" class="fixed inset-0 z-[100] bg-[#0f172a] flex flex-col items-center justify-center">
-        <div class="relative w-[280px] h-[380px] sm:w-[300px] sm:h-[420px] rounded-[100px] overflow-hidden window-frame-outer">
+    <div x-show="loading" x-transition:leave="transition ease-in duration-500" class="fixed inset-0 z-[100] bg-[#0f172a] flex flex-col items-center justify-center">
+        <div class="relative w-[180px] h-[250px] sm:w-[220px] sm:h-[310px] rounded-[80px] overflow-hidden window-frame-outer">
             <div class="absolute inset-0 bg-gradient-to-b from-[#7dd3fc] via-[#38bdf8] to-[#fb923c] overflow-hidden">
-                <div class="cloud-realistic w-48 h-16 top-20" style="animation-duration: 12s; left: 10%; opacity: 0.6;"></div>
-                <div class="cloud-realistic w-64 h-24 top-40" style="animation-duration: 8s; left: 50%; opacity: 0.8;"></div>
-                <div class="cloud-realistic w-80 h-32 bottom-10" style="animation-duration: 10s; left: 0%; opacity: 0.7;"></div>
+                <div class="cloud-realistic w-48 h-16 top-20" style="animation-duration: 8s; left: 10%; opacity: 0.6;"></div>
+                <div class="cloud-realistic w-64 h-24 top-40" style="animation-duration: 6s; left: 50%; opacity: 0.8;"></div>
+                <div class="cloud-realistic w-80 h-32 bottom-10" style="animation-duration: 7s; left: 0%; opacity: 0.7;"></div>
             </div>
         </div>
-        <div class="mt-10 text-center text-white">
-            <h2 class="font-black text-3xl tracking-[0.3em] uppercase">VIAJATO</h2>
-            <p class="text-slate-500 text-xs tracking-[0.2em] uppercase mt-2">Sua viagem começa agora</p>
+        <div class="mt-8 text-center text-white">
+            <h2 class="font-black text-2xl tracking-[0.3em] uppercase">VIAJATO</h2>
+            <p class="text-slate-500 text-[10px] tracking-[0.2em] uppercase mt-1">Sua viagem começa agora</p>
         </div>
     </div>
 
-    <!-- NAVBAR -->
-    <nav :class="scrolled ? 'glass-nav shadow-lg py-3' : 'bg-transparent py-5'" class="fixed w-full z-50 transition-all duration-300">
+    <!-- NAVBAR (Aumentada em ~50%: py-5 para py-8 inicial, py-3 para py-5 scrollado) -->
+    <nav :class="scrolled ? 'glass-nav shadow-lg py-5' : 'bg-transparent py-8'" class="fixed w-full z-50 transition-all duration-300">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img :src="scrolled ? 'https://i.ibb.co/TBRqs4jZ/Logo-Cor-Sem-fundo.png' : 'https://i.ibb.co/QFYRcnnJ/Logo-Final-Branco-e-Laranja.png'" alt="Viajato" class="h-9 transition-all">
+                <img :src="scrolled ? 'https://i.ibb.co/p6VWwbwq/logo-azul.png' : 'https://i.ibb.co/gbMrg8KD/logo-branca.png'" alt="Viajato" class="h-9 transition-all">
             </div>
 
             <div class="hidden md:flex items-center gap-8 text-sm">
@@ -144,7 +143,7 @@
         </div>
     </nav>
 
-    <!-- HERO (AJUSTADO PARA 92vh) -->
+    <!-- HERO -->
     <section id="inicio" class="relative h-[92vh] flex items-center bg-slate-900">
         <div class="absolute inset-0 bg-cover bg-center opacity-70" style="background-image: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?auto=format&fit=crop&q=80&w=2000')"></div>
         <div class="container mx-auto px-4 relative z-10 text-white">
@@ -230,7 +229,7 @@
     }">
         <div class="container mx-auto px-4 text-center mb-12">
             <h2 class="text-4xl font-black uppercase text-viajato-blue mb-4 tracking-tighter">Destinos mais Procurados</h2>
-            <p class="text-slate-500 text-sm">Navegue pelos nossos 10 destinos exclusivos.</p>
+            <p class="text-slate-500 text-sm">Conheça os destinos mais desejados de nossos clientes.</p>
         </div>
         
         <div class="relative container mx-auto px-4">
@@ -239,45 +238,55 @@
             </button>
             
             <div x-ref="carousel" class="carousel-container flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-12">
+                <!-- Maceió -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://i.ibb.co/VfwbBN5/Maceio.jpg?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <img src="https://i.ibb.co/VfwbBN5/Maceio.jpg" class="h-56 w-full object-cover">
                     <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Maceió</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Paris -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <img src="https://i.ibb.co/N6JzCdCK/Paris.jpg" class="h-56 w-full object-cover">
                     <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Paris</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Gramado -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Disney</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
-                </div>
-                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1578330132801-f2bc6293936a?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
+                    <img src="https://i.ibb.co/83N0J79/Gramado.jpg" class="h-56 w-full object-cover">
                     <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Gramado</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Fortaleza -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Roma</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/MDGHpW12/Fortaleza.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Fortaleza</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- João Pessoa -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Noronha</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/k6Dh5SpT/joao-pessoa.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">João Pessoa</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Lisboa -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Egito</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/RTVKc3mh/Lisboa.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Lisboa</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Buenos Aires -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Japão</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/ksqt5J9L/Buenos-Aires.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Buenos Aires</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Porto de Galinhas -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1510097467424-192d713fd8b2?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Cancún</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/DgDf33dz/Porto-de-Galinhas.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Porto de Galinhas</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
+                <!-- Santiago -->
                 <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
-                    <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&q=80&w=600" class="h-56 w-full object-cover">
-                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Suíça</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                    <img src="https://i.ibb.co/RT441wsN/santiago.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Santiago</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
+                </div>
+                <!-- Orlando -->
+                <div class="min-w-[300px] snap-center bg-white rounded-[2rem] overflow-hidden destination-card shadow-sm border border-slate-100">
+                    <img src="https://i.ibb.co/m5LbzFq5/disney.jpg" class="h-56 w-full object-cover">
+                    <div class="p-6"><h3 class="text-lg font-black mb-4 uppercase text-viajato-blue">Orlando</h3><a href="https://wa.me/5531984885050" target="_blank" class="block w-full bg-viajato-yellow py-3 rounded-xl text-blue-900 font-black text-center text-sm">Consultar</a></div>
                 </div>
             </div>
             
@@ -323,7 +332,7 @@
             </div>
 
             <div class="text-center">
-                <a href="https://www.google.com/search?q=Viajato+Viagens+avaliações" target="_blank" class="inline-flex items-center gap-2 text-slate-500 font-bold hover:text-viajato-blue transition-colors group">
+                <a href="https://g.page/r/CaJms3-nioZbEAI/review" target="_blank" class="inline-flex items-center gap-2 text-slate-500 font-bold hover:text-viajato-blue transition-colors group">
                     <img src="https://www.google.com/favicon.ico" alt="" class="w-4 h-4">
                     Ver todas as avaliações no Google 
                     <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
@@ -348,7 +357,7 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
                 <div>
-                    <img src="https://i.ibb.co/QFYRcnnJ/Logo-Final-Branco-e-Laranja.png" alt="Viajato Logo" class="h-9 mb-8">
+                    <img src="https://i.ibb.co/gbMrg8KD/logo-branca.png" alt="Viajato Logo" class="h-9 mb-8">
                     <h4 class="text-white font-black text-sm mb-4 uppercase">VIAJATO VIAGENS LTDA</h4>
                     <p class="text-xs mb-2">CNPJ: 64.630.944/0001-25</p>
                     <p class="text-xs">Belo Horizonte - MG</p>
@@ -367,22 +376,30 @@
                 <div>
                     <h4 class="text-white font-black text-xs mb-8 uppercase tracking-widest">CONTATO</h4>
                     <ul class="space-y-4 text-sm font-bold">
-                        <li class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4 text-viajato-yellow"></i> (31) 98488-5050</li> 
-                        <li class="flex items-center gap-3"><i data-lucide="instagram" class="w-4 h-4 text-viajato-yellow"></i> @viajatoviagens</li>
+                        <li>
+                            <a href="https://wa.me/5531984885050" target="_blank" class="flex items-center gap-3 hover:text-white transition-colors">
+                                <i data-lucide="phone" class="w-4 h-4 text-viajato-yellow"></i> (31) 98488-5050
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://instagram.com/viajatoviagens" target="_blank" class="flex items-center gap-3 hover:text-white transition-colors">
+                                <i data-lucide="instagram" class="w-4 h-4 text-viajato-yellow"></i> @viajatoviagens
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="text-white font-black text-xs mb-8 uppercase tracking-widest">TURISMO LEGAL</h4>
                     <div class="bg-slate-800/20 p-4 rounded-xl inline-block">
-                        <img src="https://i.ibb.co/0jK2PGQp/cadastur.webp" alt="Selo Cadastur" class="h-12 mb-2 opacity-80">
-                        <p class="text-[15px] font-black text-slate-500 uppercase tracking-tighter">CERTIFICADO CADASTUR OFICIAL</p>
+                        <img src="https://i.ibb.co/0jK2PGQp/cadastur.webp" alt="Selo Cadastur" class="h-10 mb-2 opacity-80">
+                        <p class="text-[10px] font-black text-slate-500 uppercase tracking-tighter">CERTIFICADO CADASTUR OFICIAL</p>
                     </div>
                 </div>
             </div>
 
             <div class="pt-8 border-t border-slate-800/50 text-center text-[10px] uppercase font-bold tracking-[0.2em] opacity-40">
-                <p>© 2026 VIAJATO VIAGENS. TODOS OS DIREITOS RESERVADOS.</p>
+                <p>© 2024 VIAJATO VIAGENS. TODOS OS DIREITOS RESERVADOS.</p>
             </div>
         </div>
     </footer>
